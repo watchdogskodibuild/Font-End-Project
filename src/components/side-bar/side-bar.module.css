@@ -1,0 +1,35 @@
+@import url(/src/styles/_layout-utils.css);
+.nav {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.navBar {
+  height: 50%;
+}
+
+.logo {
+  height: 10%;
+}
+
+.container {
+  background: var(--color-side-bar);
+  height: 100%;
+  width: 7vw;
+  padding: 2%;
+  color: var(--color-white);
+  position: fixed;
+  top: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+} 

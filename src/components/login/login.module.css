@@ -1,0 +1,7 @@
+@import url(/src/styles/_layout-utils.css);
+
+.input-button {
+    position: absolute;
+    top: 0.75rem;     /* = 12px from the top */
+    right: 0.75rem;   /* = 12px from the right */
+}
