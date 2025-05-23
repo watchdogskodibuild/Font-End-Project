@@ -10,7 +10,7 @@
   /* Background colors */
   --color-beige: #f5f5dc;
   --color-tan: #d2b48c;
-  
+  --primary: hsl(222.2, 47.4%, 11.2%);
   /* Gradient backgrounds */
   --gradient-body: linear-gradient(to bottom, var(--color-beige) 0%, var(--color-tan) 100%);
 } 

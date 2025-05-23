@@ -18,6 +18,14 @@
   width: 90%;
 }
 
+.width-80-percent {
+  width: 80%;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+}
 .items-center {
   align-items: center7;
 }
@@ -37,7 +45,7 @@
   height: 100%;
 }
 
-.fullWidth {
+.full-width {
   width: 100%;
 }
 
@@ -96,3 +104,24 @@
 .align-text-right {
   text-align: right !important;
 }
+
+.justify-end {
+  justify-content: end;
+}
+
+.padding-35-percent {
+  padding-right: 35%!important;
+  padding-left: 35%!important;
+}
+
+.icon-circle {
+  height: 2.5rem;
+  width: 2.5rem;
+  padding: 0.5rem;
+  border-radius: 9999px;
+  background-color: #e5e7eb;
+}
+
+  .dark-color {
+    color: var(--primary);
+  }

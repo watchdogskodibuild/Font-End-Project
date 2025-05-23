@@ -1,18 +1,28 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Input, InputLabel, Card, CardContent, CardActions, CardHeader, Alert, Snackbar} from "@mui/material";
 import { Eye, EyeOff, LogIn, Mail } from "lucide-react";
 import styles from './login.module.css';
-import { AuthContext } from "../../main";
+import { AuthContext, UserContext } from "../app/app";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { isNil } from "lodash";
 
 export function Login() {
   const auth = useContext(AuthContext);
+  const user = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false); // Snackbar visibility
+  const navigate = useNavigate();
+
+  useEffect( () => {
+    if(!isNil(user)) {
+      navigate("/");
+    }
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,7 +31,9 @@ export function Login() {
     setTimeout( async () => {7
       setIsLoading(false);
       try {
-      await loginWithEmailAndPasssword(email, password);
+      loginWithEmailAndPasssword(email, password).then(() => {
+        navigate("/");
+      });
       
       } catch {
       setOpen(true); // Show snackbar
@@ -36,7 +48,7 @@ export function Login() {
   
   return (
       <div className="flex justify-center items-center min-80-percent">
-        <Card className="fullWidth">
+        <Card className="full-width">
           <CardHeader className="text-center" title="התחברות" subheader="התחברו למערכת כדי להמשיך">  
           </CardHeader>
           <CardContent>
@@ -105,7 +117,7 @@ export function Login() {
                 variant="contained"
                 type="submit"
                 color="secondary"
-                className="fullWidth"
+                className="full-width"
                 disabled={isLoading}
               >
                 {isLoading ? (
