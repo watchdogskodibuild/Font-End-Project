@@ -21,10 +21,10 @@ export function Editor() {
 //   // Load template content when component mounts
   useEffect(() => {
     if (templateId) {
-        templateId = parseInt(templateId);
         getTemplateById(templateId).then(template => {
+          console.log(template);
           if (template.exists()) {
-            setTitle(template.data().title);
+            setTitle(template.data().name);
             setContent(template.data().content);
           }
         }   

@@ -62,7 +62,8 @@ export const getAllTemplates = async () => {
 };
 
 export const getTemplateById = async (id) => {
-    const documentRef = doc(db, "templates", id);
+  console.log(id);  
+  const documentRef = doc(db, "templates", id);
   return await getDoc(documentRef);
 };
 
