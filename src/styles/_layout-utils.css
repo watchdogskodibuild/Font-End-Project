@@ -22,6 +22,10 @@
   width: 80%;
 }
 
+.width-20-percent {
+  width: 20%;
+}
+
 .row {
   display: flex;
   flex-direction: row;
@@ -49,6 +53,10 @@
   width: 100%;
 }
 
+.full-height {
+  height: 100%;
+}
+
 
 .text-center {
   text-align: center;
@@ -65,8 +73,14 @@
 
 .text-sm {
   font-size: 0.875rem;
-  line-height: 1.25rem;
+  line-height: 25px;
 }
+
+.text-md {
+  font-size: 1rem;
+  line-height: 25px;
+}
+
 
 .pad-left {
   padding-left: 2%;
@@ -125,3 +139,50 @@
   .dark-color {
     color: var(--primary);
   }
+
+.bg-light {
+  background-color: white;
+}
+
+.height-40-percent {
+  height: 40%;
+}
+
+.lined-paper {
+  background-color: white; /* light paper-like color */
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent,
+    transparent 24px,
+    #d6ccc2 25px /* thin line every 25px */
+  );
+  line-height: 25px;
+  padding: 1rem;
+  font-family: 'Courier New', monospace;
+  border: 1px solid #ccc;
+  min-height: 300px;
+}
+
+.min-h-full {
+  min-height: 100%;
+}
+
+.bg-transparent {
+    background-color: transparent;
+}
+
+.outline-none {
+  outline: none;
+}
+
+.pad-8 {
+  padding: 8px;
+}
+
+.border-none {
+  border:none;
+}
+
+.resize-none {
+  resize: none;
+}

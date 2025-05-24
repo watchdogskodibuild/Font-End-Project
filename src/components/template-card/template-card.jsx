@@ -2,8 +2,8 @@ import { Card, CardContent, CardHeader, CardActions, Button} from "@mui/material
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./template-card.module.css";
 
-export const TemplateCard = ({ title, icon: Icon, description, templateId }) => {
-  const editorLink = templateId ? `/editor?template=${templateId}` : "/editor";
+export const TemplateCard = ({ title, icon: Icon, description, templateId, documentId }) => {
+  const editorLink = templateId ? `/editor?template=${templateId}` : (documentId ? `/editor?documentId=${documentId}` : "/editor");
   const navigate = useNavigate();
   const useTemplate = () => {
     navigate(editorLink);
@@ -13,12 +13,12 @@ export const TemplateCard = ({ title, icon: Icon, description, templateId }) => 
     <Card className={styles.TemplateCard}>
       <CardHeader title={<div className="row justify-between">{title}<div className="icon-circle"><Icon/></div></div>}>
       </CardHeader>
-      <CardContent>
-        <p className="text-gray">{description}</p>
+      <CardContent className="bg-light height-40-percent">
+        <p className="text-gray text-md">{description}</p>
       </CardContent>
-      <CardActions className="border-gray-300 justify-end rtl">
+      <CardActions className="border-gray-300 justify-end rtl ">
         <Button variant="contained" color="dark" onClick={useTemplate}>
-            התחל כתיבה
+            {documentId ? "ערוך" : "התחל כתיבה"}
         </Button>
       </CardActions>
     </Card>

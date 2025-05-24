@@ -6,11 +6,12 @@
     border: gray;
     border-radius: 4%;
     transition: all 0.3s cubic-bezier(.25,.8,.25,1);
-    background: #F9FAFB;
-    min-width: 20vw;
+    background-color: #F9FAFB!important;
+    width: 27vw;
     display: flex;
     flex-direction: column;
     height: 25vh;
+    margin: 1%;
 }
 
 .TemplateCard:hover {

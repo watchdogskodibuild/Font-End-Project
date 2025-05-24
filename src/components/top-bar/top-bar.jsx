@@ -29,8 +29,6 @@ export function TopBar({ title }) {
         return "הגדרות";
       case "/profile":
         return "פרופיל";
-      case "/editor":
-        return "עבודה שנבחרה";
       case "/admin-settings":
         return "הגדרות מנהל";
       case "/login":
@@ -38,14 +36,14 @@ export function TopBar({ title }) {
       case "/signup":
         return "הרשמה";
       default:
-        return "Easy2Write";
+        return "";
     }
   };
 
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>{getPageTitle()}</h1>
-      {!isNil(user) && <Button color='secondary' variant="contained" onClick={disconnectUser}>התנתק</Button>}    
+      {!isNil(user) && <Button color='light' variant="contained" size='large' onClick={disconnectUser}>התנתק</Button>}    
     </div>
   );
 } 
