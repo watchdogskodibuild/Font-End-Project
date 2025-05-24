@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState, useContext } from "react";
-import { Button, Input, Tab, Tabs, Box, Card} from "@mui/material";
+import { Button, Input, Tab, Tabs, Box, Card, InputLabel, FormControl, TextField, duration} from "@mui/material";
 import { Save, Download, Share2, MoreHorizontal } from "lucide-react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { getDocument, getDocumentsForUser, getTemplate, updateDocument } from "../app/app";
+import { getDocument, getTemplateById, updateDocument } from "../app/app";
 import { addDocumentsForUser } from "../app/app";
 import { UserContext } from '../app/app';
 import { isNil } from "lodash";
@@ -14,6 +14,7 @@ export function Editor() {
   const [title, setTitle] = useState("עבודה חדשה");
   const editorRef = useRef(null);
   const [content, setContent] = useState("");
+  const [description, setDescription] = useState("");
   let templateId = searchParams.get('template');
   let documentId = searchParams.get('documentId');
   
@@ -21,11 +22,14 @@ export function Editor() {
   useEffect(() => {
     if (templateId) {
         templateId = parseInt(templateId);
-        const template = getTemplate(templateId);
-        if (template) {
-            setTitle(template.name);
-            setContent(template.content);
-        }
+        getTemplateById(templateId).then(template => {
+          if (template.exists()) {
+            setTitle(template.data().title);
+            setContent(template.data().content);
+          }
+        }   
+        );
+        
     }
   }, [templateId]);
   
@@ -33,7 +37,8 @@ export function Editor() {
     if (documentId && user) {
         getDocument(documentId).then(document => {
           if(document.exists()) {
-            setTitle("עריכת קובץ קיים");
+            setTitle(document.data().title);
+            setDescription(document.data().description);
             setContent(document.data().content);
           } else {
             documentId = null;
@@ -42,7 +47,6 @@ export function Editor() {
        };
   }, [documentId, user]);
   
-  // Auto-grow textarea
   useEffect(() => {
     const textarea = editorRef.current;
     if (textarea) {
@@ -81,40 +85,16 @@ export function Editor() {
 
     const handleSave = () => {
       if(documentId) {
-        updateDocument(content, documentId);
+        updateDocument(content, title, description, documentId);
       } else {
-        addDocumentsForUser(content, templateId, user);
+        addDocumentsForUser(content, title, description, templateId, user);
       }
     }
 
   return (
     <div className="flex flex-col full-height full-width">
       {/* Header */}
-      <header className="bg-gray-200 p-4 flex justify-between items-center">
-        <div className="flex items-center space-x-4 rtl:space-x-reverse">
-          <Link to="/" className="text-gray-600 hover:text-gray-900">
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              width="24" 
-              height="24" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              stroke="currentColor" 
-              strokeWidth="2" 
-              strokeLinecap="round" 
-              strokeLinejoin="round"
-            >
-              <path d="m12 19-7-7 7-7"/>
-              <path d="M19 12H5"/>
-            </svg>
-          </Link>
-          <Input
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="font-bold text-xl border-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 p-0 h-8"
-          />
-        </div>
-        
+      <header className="flex justify-end items-end">
         <div className="flex items-center">
           <Button size="sm" variant="ghost" onClick={handleSave}>
             <Save/>
@@ -126,14 +106,33 @@ export function Editor() {
           </Button>
         </div>
       </header>
-      
-      <div className="flex flex-1 overflow-hidden full-height full-width">
+
         {/* Left sidebar - Tools */}
-        <div className="width-20-percent bg-white overflow-y-auto">
+        <div className="flex-wrap flex full-height">
+        <div className="min-width-20-percent min-200-px bg-white pad-left flex flex-col pad-bottom flex-size-min-300">
+            <FormControl className="pad-top">
+              <TextField
+                fullWidth
+                label="כותרת"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+            </FormControl>
+            <FormControl className="pad-top">
+              <TextField
+                fullWidth
+                label="תיאור"
+                multiline
+                minRows={5}
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+              />
+            </FormControl>
         </div>
         
         {/* Main content - Editor */}
-          <Card className="width-80-percent mx-auto max-w-4xl full-height editor-container">
+        <div className="width-80-percent mx-auto max-w-4xl full-height editor-container min-300-px flex-size-min-300">
+          <Card className="full-width full-height">
             <div className="lined-paper min-h-full pad-8">
               <textarea
                 ref={editorRef}
@@ -144,6 +143,7 @@ export function Editor() {
               />
             </div>
           </Card>
+          </div>
       </div>
       </div>
   );

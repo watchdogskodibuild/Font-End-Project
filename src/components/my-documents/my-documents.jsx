@@ -22,6 +22,6 @@ export function MyDocuments() {
   }, [user]);
 
   return (<div className={styles.mainSection}>
-    {documents && documents.map(document => <TemplateCard title={document.data().title} description={document.data().description} icon={FilePen} documentId={document.id}></TemplateCard>)}
+    {documents && documents.map(document => <TemplateCard key={document.id} title={document.data().title} description={document.data().description} icon={FilePen} documentId={document.id}></TemplateCard>)}
   </div>);
 } 

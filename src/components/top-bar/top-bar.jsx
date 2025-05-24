@@ -26,7 +26,7 @@ export function TopBar({ title }) {
       case "/documents":
         return "המסמכים שלי";
       case "/settings":
-        return "הגדרות";
+        return "פורטל המנהל";
       case "/profile":
         return "פרופיל";
       case "/admin-settings":

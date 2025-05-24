@@ -22,52 +22,9 @@ import { Briefcase, GraduationCap, FileText, PenLine } from "lucide-react";
 import { Templates } from "../templates/templates";
 import { Editor } from "../editor/editor";
 import { MyDocuments } from "../my-documents/my-documents";
-
-export const getTemplate = (id) => templates.find(t => t.id === id);
-export const templates = [
-  {
-    id: 1,
-    name: "קורות חיים",
-    description: "תבנית מקצועית לכתיבת קורות חיים",
-    icon: Briefcase,
-    content: "hi"
-  },
-    {
-    id: 2,
-    name: "תזה",
-    description: "תבנית מובנית לכתיבת עבודת תזה לתואר שני",
-    icon: GraduationCap,
-    content: "hi"
-  },
-    {
-    id: 3,
-    name: "סקירת ספרות",
-    description: "תבנית לכתיבת סקירת ספרות אקדמית בנושא מחקרי",
-    icon: FileText,
-    content: "hi"
-  },
-    {
-    id: 4,
-    name: "הצעת מחקר",
-    description: "תבנית להכנת הצעת מחקר אקדמית",
-    icon: FileText,
-    content: "hi"
-  },
-    {
-    id: 5,
-    name: "יומן אישי",
-    description: "תבנית ליומן אישי עם שאלות מנחות ומבנה מוצע",
-    icon: PenLine,
-    content: "hi"
-  },
-   {
-    id: 6,
-    name: "עבודה סמינריונית",
-    description: "תבנית מקיפה לכתיבת עבודה סמינריונית הכוללת כל המרכיבים הנדרשים",
-    icon: GraduationCap,
-    content: "hi"
-  }
-]
+import { AdminPage } from "../admin-page/admin-page";
+document.documentElement.style.overflow = 'auto'; // For the entire document
+document.body.style.overflow = 'auto'; // For the body of the document
 
 const firebaseApp = initializeApp({
   apiKey: "AIzaSyDrJPKOEPB9_Drkp-cUWTi_G2siBLXTwbg",
@@ -80,19 +37,46 @@ const firebaseApp = initializeApp({
 });
 /******* DB Access *******/
 const db = getFirestore(firebaseApp);
-const table = collection(db, "userDocuments");
+const usersTable = collection(db, "userDocuments");
+const templatesTable = collection(db, "templates");
+
+const templateType = {
+    work: 1,
+    study: 2,
+    personal: 3
+};
+
+export const getIconForTemplateType = (type) => {
+  switch(type) {
+    case templateType.study: 
+      return GraduationCap;
+    case templateType.work: 
+      return Briefcase;
+    case templateType.personal: 
+      return PenLine;
+  }
+}
+
+export const getAllTemplates = async () => {
+  return (await getDocs(query(templatesTable))).docs;
+};
+
+export const getTemplateById = async (id) => {
+    const documentRef = doc(db, "templates", id);
+  return await getDoc(documentRef);
+};
 
 export const getDocumentsForUser = async (user) => {
-  return (await getDocs(query(table, where("userEmail", "==", user.email)))).docs;
+  return (await getDocs(query(usersTable, where("userEmail", "==", user.email)))).docs;
 };
 
-export const addDocumentsForUser = async (content, templateId, user) => {
-  return await addDoc(table, {userEmail: user.email, templateId, content});
+export const addDocumentsForUser = async (content, title, description, templateId, user) => {
+  return await addDoc(usersTable, {userEmail: user.email, templateId, content, title, description});
 };
 
-export const updateDocument = async (content, documentId) => {
+export const updateDocument = async (content, title, description, documentId) => {
   const documentRef = doc(db, "userDocuments", documentId);
-  return await updateDoc(documentRef, {content: content});
+  return await updateDoc(documentRef, {content: content, title, description});
 };
 
 export const getDocument = async (documentId) => {
@@ -105,6 +89,7 @@ export const getDocument = async (documentId) => {
 const auth = getAuth(firebaseApp);
 export const AuthContext = createContext(auth); 
 export const UserContext = createContext(null);
+
 
 export function App() {
   const [currentUser, setCurrentUser] = useState(null);
@@ -133,7 +118,7 @@ export function App() {
       </TopBar>
       <SideBar> 
       </SideBar>  
-      <div className="mainRoute">
+      <div className="mainRoute" id="mainPart">
         <Routes>
         <Route path="*" element={<NoMatch />} />
         <Route path="/" element={<HomePage />} />
@@ -144,7 +129,7 @@ export function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/editor" element={<Editor />} />
         <Route path="/documents" element={<MyDocuments />} />
-      
+        <Route path="/settings" element={<AdminPage />} />
       </Routes>
       </div>
     </div>

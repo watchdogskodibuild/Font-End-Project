@@ -26,13 +26,23 @@
   width: 20%;
 }
 
+.min-width-20-percent {
+  min-width: 20%;
+  max-width: 400px;
+}
 .row {
   display: flex;
   flex-direction: row;
 }
+
 .items-center {
-  align-items: center7;
+  align-items: center;
 }
+
+.items-end {
+  align-items:flex-end;
+}
+
 .flex-center {
   display: flex;
   justify-content: center;
@@ -179,10 +189,38 @@
   padding: 8px;
 }
 
+.pad-top {
+  padding-top: 20px!important;
+}
+
+.pad-bottom{
+ padding-bottom: 20px!important; 
+}
+
 .border-none {
   border:none;
 }
 
 .resize-none {
   resize: none;
+}
+
+.min-300-px {
+  min-width: 300px;
+}
+
+.min-200-px {
+  min-width: 200px;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-size-min-300 {
+      flex: 1 1 300px;
+}
+
+.flex-size-min-200 {
+      flex: 1 1 200px;
 }

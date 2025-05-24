@@ -18,6 +18,7 @@
   background: var(--color-side-bar);
   height: 100%;
   width: 7vw;
+  min-width: 40px;
   padding: 2%;
   color: var(--color-white);
   position: fixed;

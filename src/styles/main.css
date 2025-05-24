@@ -16,10 +16,11 @@
 }
 
 .mainRoute {
-    width: calc(100vw - 7vw);
     position: fixed;
-    bottom:0;
-    left:0;
+    top: 10vh;
+    right:  calc(max(7vw, 40px));
     height: calc(100vh - 10vh);
+    width: calc(100vw - max(7vw, 40px));
     padding: 3%;
+    overflow: auto;
 }
