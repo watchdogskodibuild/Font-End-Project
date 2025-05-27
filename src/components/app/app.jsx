@@ -14,7 +14,7 @@ import { SideBar } from "../side-bar/side-bar";
 import { Signup } from "../signup/signup";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import {isNil} from "lodash";
+import {isNil, template} from "lodash";
 import { addDoc, collection, getDoc, getDocs, getFirestore, query, where, doc, updateDoc } from "firebase/firestore";
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from "@emotion/react";
@@ -23,6 +23,7 @@ import { Templates } from "../templates/templates";
 import { Editor } from "../editor/editor";
 import { MyDocuments } from "../my-documents/my-documents";
 import { AdminPage } from "../admin-page/admin-page";
+import { TemplateCreator } from "../template-creator/template-creator";
 document.documentElement.style.overflow = 'auto'; // For the entire document
 document.body.style.overflow = 'auto'; // For the body of the document
 
@@ -40,19 +41,20 @@ const db = getFirestore(firebaseApp);
 const usersTable = collection(db, "userDocuments");
 const templatesTable = collection(db, "templates");
 
-const templateType = {
+export const templateTypes = {
     work: 1,
     study: 2,
     personal: 3
 };
 
 export const getIconForTemplateType = (type) => {
+  console.log(type);
   switch(type) {
-    case templateType.study: 
+    case templateTypes.study: 
       return GraduationCap;
-    case templateType.work: 
+    case templateTypes.work: 
       return Briefcase;
-    case templateType.personal: 
+    case templateTypes.personal: 
       return PenLine;
   }
 }
@@ -85,13 +87,16 @@ export const getDocument = async (documentId) => {
   return await getDoc(documentRef);
 };
 
+export const addTemplate = async (templateType, name, description,content) => {
+  console.log(typeof(templateType));
+  return await addDoc(templatesTable, {templateType, name, description, content});
+}
 
 /******* Authentication *******/
 const auth = getAuth(firebaseApp);
 export const AuthContext = createContext(auth); 
-export const UserContext = createContext(null);
-
-
+export const UserContext = createContext(null); 
+export const admins = ["elayf00@gmail.com", "Itayhw96@gmail.com"];
 export function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const theme = createTheme({
@@ -109,6 +114,7 @@ export function App() {
   // //detect auth state
   onAuthStateChanged(auth, user => {
       setCurrentUser(user);
+      console.log(currentUser);
    });
 
   return (<>
@@ -131,6 +137,7 @@ export function App() {
         <Route path="/editor" element={<Editor />} />
         <Route path="/documents" element={<MyDocuments />} />
         <Route path="/settings" element={<AdminPage />} />
+        <Route path="/addTemplate" element={<TemplateCreator />} />
       </Routes>
       </div>
     </div>

@@ -1,24 +1,25 @@
 import styles from './admin-page.module.css';
 import { Button, Card, CardContent, CardHeader } from '@mui/material';
-import { PenLine, BookOpenText, GraduationCap } from 'lucide-react';
+import { PenLine, BookOpenText, GraduationCap, Briefcase } from 'lucide-react';
 import { FileText } from 'lucide-react';
-import { UserContext } from '../app/app';
+import { admins, templateTypes, UserContext } from '../app/app';
 import { useContext, useEffect, useState } from 'react';
 import {isNil} from "lodash";
 import { useNavigate } from "react-router-dom";
+import { AddTemplateCard } from '../add-template-card/add-template-card';
 
 export function AdminPage() {
   
   const [isAdmin, setisAdmin] = useState(false);
   const navigate = useNavigate();
   var user = useContext(UserContext);
-  const adminEmails = ["elayf01@gmail.com"];
+
 
   useEffect(() => {
     if(isNil(user)) {
       navigate("/login");
       } else {
-        setisAdmin(adminEmails.includes(user.email));
+        setisAdmin(admins.includes(user.email));
       }
   }, [user]);
 
@@ -29,5 +30,14 @@ export function AdminPage() {
             {isAdmin ? "בדף זה תוכל להוסיף תבניות חדשות לכתיבת מסמכים" : "אינך מנהל ועל כן אינך נגיש לאפשרויות בדף זה"}
           </p>
     </section>
+    <section className={styles.addTemplateSection}>
+      <p className="text-xl">הוספת תבנית חדשה</p>
+    <div className="row">
+      <AddTemplateCard title="תבנית ללימודים" icon={GraduationCap} templateType={templateTypes.study}></AddTemplateCard>
+      <AddTemplateCard title="תבנית משרדית" icon={Briefcase} templateType={templateTypes.work}></AddTemplateCard>
+      <AddTemplateCard title="תבנית אישית" icon={PenLine} templateType={templateTypes.personal}></AddTemplateCard>
+    </div>
+    </section>
+    
   </div>);
 } 

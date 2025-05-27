@@ -1,0 +1,23 @@
+@import url(/src/styles/_layout-utils.css);
+
+.addTemplateCard {
+    background-color: #ffffff;
+    border-radius: 0.5rem;
+    margin: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    flex: 1 1 300px;
+    min-width: 20vw;
+    max-width: 180px;
+    max-height: 160px;
+  }
+
+.cardHeader {
+    justify-content: space-around;
+    display: flex;
+    font-weight: bold!important;
+  }
+
+  .cardActions {
+    justify-content: center;
+  }
