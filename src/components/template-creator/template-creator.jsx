@@ -17,10 +17,12 @@ export function TemplateCreator() {
   let templateType = searchParams.get('templateType');  
   const [templateTypeNumber, setTemplateTypeNumber] = useState();
 
+useEffect( () => {
   if (!user || !admins.includes(user.email)) {
       navigate("/login");
   }
 
+  console.log(templateType);
   if(!templateTypeNumber) {
     if(isNaN(templateType)) {
       navigate("/settings");
@@ -30,11 +32,22 @@ export function TemplateCreator() {
       setTemplateTypeNumber(num);
     }
 
+  }
+  },[user, templateType])
+
+  useEffect( () => {
+  
+    if(!templateTypeNumber) {
+      return;
+    }
+    
     if( !Object.values(templateTypes).includes(templateTypeNumber)) {
       navigate("/settings");
     }
-  }
-  
+  },[templateTypeNumber])
+    
+
+    
   useEffect(() => {
     const textarea = editorRef.current;
     if (textarea) {

@@ -7,6 +7,8 @@ import { useContext, useEffect, useState } from 'react';
 import {isNil} from "lodash";
 import { useNavigate } from "react-router-dom";
 import { AddTemplateCard } from '../add-template-card/add-template-card';
+import { TemplateUsedChart } from '../templates-used-chart/templates-used-chart';
+import { UsersWithMostDocumentsPie } from '../user-with-most-documents/user-with-most-documents';
 
 export function AdminPage() {
   
@@ -27,9 +29,10 @@ export function AdminPage() {
     <section className={styles.welcomeSection}>          
       <h1 className={styles.heroTitle}>ברוכים הבאים לפורטל המנהל</h1>
           <p className={styles.heroDescription}> 
-            {isAdmin ? "בדף זה תוכל להוסיף תבניות חדשות לכתיבת מסמכים" : "אינך מנהל ועל כן אינך נגיש לאפשרויות בדף זה"}
+            {isAdmin ? "בדף זה תוכל להוסיף תבניות חדשות לכתיבת מסמכים ולצפות בסטטוס האתר" : "אינך מנהל ועל כן אינך נגיש לאפשרויות בדף זה"}
           </p>
     </section>
+    {isAdmin && <div className={styles.mainSection}>
     <section className={styles.addTemplateSection}>
       <p className="text-xl">הוספת תבנית חדשה</p>
     <div className="row">
@@ -38,6 +41,11 @@ export function AdminPage() {
       <AddTemplateCard title="תבנית אישית" icon={PenLine} templateType={templateTypes.personal}></AddTemplateCard>
     </div>
     </section>
+    <section className="width-90-percent row">
+      <TemplateUsedChart></TemplateUsedChart>
+      <UsersWithMostDocumentsPie></UsersWithMostDocumentsPie>
+    </section>
+    </div>}
     
   </div>);
 } 

@@ -1,0 +1,7 @@
+@import url(/src/styles/_layout-utils.css);
+
+.cardHeader {
+    justify-content: space-around;
+    display: flex;
+    font-weight: bold!important;
+  }

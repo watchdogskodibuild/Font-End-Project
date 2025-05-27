@@ -14,7 +14,7 @@ import { SideBar } from "../side-bar/side-bar";
 import { Signup } from "../signup/signup";
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import {isNil, template} from "lodash";
+import {first, isNil, template} from "lodash";
 import { addDoc, collection, getDoc, getDocs, getFirestore, query, where, doc, updateDoc } from "firebase/firestore";
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from "@emotion/react";
@@ -24,6 +24,7 @@ import { Editor } from "../editor/editor";
 import { MyDocuments } from "../my-documents/my-documents";
 import { AdminPage } from "../admin-page/admin-page";
 import { TemplateCreator } from "../template-creator/template-creator";
+import { updateProfile } from "firebase/auth";
 document.documentElement.style.overflow = 'auto'; // For the entire document
 document.body.style.overflow = 'auto'; // For the body of the document
 
@@ -38,7 +39,7 @@ const firebaseApp = initializeApp({
 });
 /******* DB Access *******/
 const db = getFirestore(firebaseApp);
-const usersTable = collection(db, "userDocuments");
+const documentsTable = collection(db, "userDocuments");
 const templatesTable = collection(db, "templates");
 
 export const templateTypes = {
@@ -63,6 +64,24 @@ export const getAllTemplates = async () => {
   return (await getDocs(query(templatesTable))).docs;
 };
 
+
+export const getDocumentsCountPerType = async () => {
+  const docsPerType =[0, 0, 0];
+  const docs = (await getDocs(query(documentsTable))).docs;
+  const allTemplates = await getAllTemplates();
+  docs.forEach(doc => {
+    if(isNil(doc.data().templateId)) {
+      return;
+    }
+    console.log(doc.data());
+    const template = allTemplates.filter(t => t.id === doc.data().templateId)[0];
+    docsPerType[template.data().templateType - 1] ++;
+  });
+  return docsPerType;
+    
+  
+} 
+
 export const getTemplateById = async (id) => {
   console.log(id);  
   const documentRef = doc(db, "templates", id);
@@ -70,11 +89,11 @@ export const getTemplateById = async (id) => {
 };
 
 export const getDocumentsForUser = async (user) => {
-  return (await getDocs(query(usersTable, where("userEmail", "==", user.email)))).docs;
+  return (await getDocs(query(documentsTable, where("userEmail", "==", user.email)))).docs;
 };
 
 export const addDocumentsForUser = async (content, title, description, templateId, user) => {
-  return await addDoc(usersTable, {userEmail: user.email, templateId, content, title, description});
+  return await addDoc(documentsTable, {userEmail: user.email, templateId, content, title, description});
 };
 
 export const updateDocument = async (content, title, description, documentId) => {
@@ -88,15 +107,42 @@ export const getDocument = async (documentId) => {
 };
 
 export const addTemplate = async (templateType, name, description,content) => {
-  console.log(typeof(templateType));
   return await addDoc(templatesTable, {templateType, name, description, content});
 }
+
+export const getDocumentsPerUserCount = async () => {
+  const numberOfDocumentsForUser = {};
+  const docs = (await getDocs(query(documentsTable))).docs;
+  docs.forEach(doc => {
+    const email = doc.data().userEmail;
+    if(email) {
+      numberOfDocumentsForUser[email] = (numberOfDocumentsForUser[email] || 0) + 1;
+    }
+  }
+  );
+  return numberOfDocumentsForUser;
+}
+
 
 /******* Authentication *******/
 const auth = getAuth(firebaseApp);
 export const AuthContext = createContext(auth); 
 export const UserContext = createContext(null); 
-export const admins = ["elayf00@gmail.com", "Itayhw96@gmail.com"];
+export const admins = ["elayf00@gmail.com", "itayhw96@gmail.com"];
+
+
+ export const updateUserProfile = async (name) => {
+  if (auth.currentUser) {
+    try {
+      await updateProfile(auth.currentUser, {
+        displayName: name,
+      });
+    } catch (error) {
+      console.error('Error updating profile:', error.message);
+    }
+  }
+};
+
 export function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const theme = createTheme({
@@ -116,6 +162,7 @@ export function App() {
       setCurrentUser(user);
       console.log(currentUser);
    });
+
 
   return (<>
     <ThemeProvider theme={theme}>

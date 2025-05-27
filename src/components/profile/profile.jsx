@@ -1,8 +1,8 @@
 import styles from './profile.module.css';
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, Button, FormLabel, TextField, FormControl, CardActions } from '@mui/material';
 import { Link } from "react-router-dom";
-import { UserContext } from '../app/app';
+import { updateUserProfile, UserContext } from '../app/app';
 import { useContext, useEffect } from 'react';
 import { isNil } from 'lodash';
 import { useNavigate } from 'react-router-dom';
@@ -10,12 +10,18 @@ import { useNavigate } from 'react-router-dom';
 export const Profile = () => {
   const userProfile = useContext(UserContext);
   const navigate = useNavigate();
-
+  const [name, setName] = useState();
   useEffect(() => {
     if(isNil(userProfile)) {
       navigate("/login");
+      } else {
+        setName(userProfile.displayName);
       }
   }, [userProfile]);
+
+  const update = () => {
+    updateUserProfile(name);
+  }
 
 
   if(userProfile) {
@@ -28,7 +34,7 @@ export const Profile = () => {
               <div className="flex flex-col">
                     <FormControl>
                       <FormLabel className="text-sm font-medium">שם מלא</FormLabel>
-                      <TextField value={userProfile.displayName}></TextField>
+                      <TextField value={name} onChange={(e) => setName(e.target.value)}></TextField>
                     </FormControl>
                     <FormControl contentEditable="false">
                       <FormLabel className="text-sm font-medium">אימייל</FormLabel>
@@ -39,8 +45,7 @@ export const Profile = () => {
               </div>
             </CardContent>
             <CardActions className="full-width justify-between padding-35-percent">
-                <Button  variant="contained" color="secondary">איפוס סיסמה</Button>
-                <Button variant="contained" color="secondary">עדכן פרטים</Button>
+                <Button variant="contained" color="secondary" onClick={update}>עדכן פרטים</Button>
              </CardActions>
           </Card>
         </div>
