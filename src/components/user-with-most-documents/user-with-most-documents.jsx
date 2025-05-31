@@ -24,7 +24,6 @@ export function UsersWithMostDocumentsPie() {
   }, []);
 
   useEffect(() => {
-    console.log(documentsPerUser);
     setData({
     labels: Object.keys(documentsPerUser),
     datasets: [

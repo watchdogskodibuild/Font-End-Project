@@ -43,7 +43,6 @@ export function Login() {
 
   const loginWithEmailAndPasssword = async (email, password) => { 
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      console.log("login successfull" + userCredential.user.displayName);
   }
   
   return (

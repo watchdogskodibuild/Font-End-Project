@@ -12,15 +12,14 @@
     font-size: 5vh;
     font-family: 'Heebo', Arial, sans-serif;
     font-weight: 600;
-    background: var(--color-white);
 }
 
 .mainRoute {
-    position: fixed;
+    position: absolute;
     top: 10vh;
     right:  calc(max(7vw, 40px));
     height: calc(100vh - 10vh);
     width: calc(100vw - max(7vw, 40px));
     padding: 3%;
-    overflow: auto;
+    overflow: scroll;
 }

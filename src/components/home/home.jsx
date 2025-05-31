@@ -1,14 +1,16 @@
 import styles from './home.module.css';
-import { Button, Card, CardContent, CardHeader } from '@mui/material';
+import { Button, CardContent } from '@mui/material';
 import { PenLine, BookOpenText, GraduationCap } from 'lucide-react';
 import { FileText } from 'lucide-react';
 import { UserContext } from '../app/app';
 import { useContext, useEffect } from 'react';
 import {isNil} from "lodash";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from '@emotion/react';
+import { CustomCard } from '../card/card';
 
 export function Home() {
-  
+  const theme = useTheme();
   const navigate = useNavigate();
   var user = useContext(UserContext);
   
@@ -19,7 +21,6 @@ export function Home() {
   }, [user]);
 
   const onNavigateToTemplates = () => {
-    console.log("hi");
     navigate("/templates"); // Replace with your path
   };
 
@@ -29,11 +30,9 @@ export function Home() {
 
   const FeatureCard = ({ title, description, icon: Icon }) => {
   return (
-  <Card className={styles.featureCard}>
-      <CardHeader title={<div className={styles.featureCardHeader}><Icon /> {title}</div>}>
-      </CardHeader>
-      <CardContent className="text-gray text-md">{description}</CardContent>
-    </Card>
+    <CustomCard className={styles.featureCard} title={<div className={styles.featureCardHeader}><Icon /> {title}</div>}>
+      <CardContent className="text-md">{description}</CardContent>
+    </CustomCard>
   );
 };
   
@@ -44,15 +43,17 @@ export function Home() {
           <p className={styles.heroDescription}> 
             פלטפורמה לסטודנטים המספקת תבניות וכלים לכתיבה אקדמית, קורות חיים ועוד
           </p>
+          <div className="row full-width justify-center">
           <div className={styles.buttonsContainer}>
             <Button color="dark"  variant='contained' size='large' onClick={onNavigateToTemplates}>
             <FileText className="ml-2 h-5 w-5" />
               עיון בתבניות
             </Button>
-            <Button color="light" variant='contained' size='large' onClick={onCreateNew}>
+            <Button  color="light" variant='contained' size='large' onClick={onCreateNew}>
                 <PenLine className="ml-2 h-5 w-5" />
                 התחלת עבודה חדשה
             </Button>
+          </div>
           </div>
     </section>
      <section className={styles.featuresGrid}>

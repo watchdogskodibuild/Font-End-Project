@@ -1,5 +1,6 @@
 
 @import url('/src/styles/text.module.css');
+@import url('/src/styles/_layout-utils.css');
 
 .container {
   background: var(--color-top-bar);
@@ -8,7 +9,7 @@
   padding: 2%;
   color: var(--color-white);
   position: fixed;
-  padding-right: 10vw;
+  padding-right: calc(max(10vw, 44px))!important;
   top: 0;
   right: 0;
   display: flex;

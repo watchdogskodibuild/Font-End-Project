@@ -25,6 +25,7 @@ import { MyDocuments } from "../my-documents/my-documents";
 import { AdminPage } from "../admin-page/admin-page";
 import { TemplateCreator } from "../template-creator/template-creator";
 import { updateProfile } from "firebase/auth";
+import { SettingsPage } from "../settings/settings";
 document.documentElement.style.overflow = 'auto'; // For the entire document
 document.body.style.overflow = 'auto'; // For the body of the document
 
@@ -49,7 +50,6 @@ export const templateTypes = {
 };
 
 export const getIconForTemplateType = (type) => {
-  console.log(type);
   switch(type) {
     case templateTypes.study: 
       return GraduationCap;
@@ -73,17 +73,13 @@ export const getDocumentsCountPerType = async () => {
     if(isNil(doc.data().templateId)) {
       return;
     }
-    console.log(doc.data());
     const template = allTemplates.filter(t => t.id === doc.data().templateId)[0];
     docsPerType[template.data().templateType - 1] ++;
   });
   return docsPerType;
-    
-  
 } 
 
 export const getTemplateById = async (id) => {
-  console.log(id);  
   const documentRef = doc(db, "templates", id);
   return await getDoc(documentRef);
 };
@@ -143,36 +139,64 @@ export const admins = ["elayf00@gmail.com", "itayhw96@gmail.com"];
   }
 };
 
+export const AutoSaveContext = createContext(false); 
 export function App() {
   const [currentUser, setCurrentUser] = useState(null);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [autoSave, setAutoSave] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  
   const theme = createTheme({
     palette: {
       dark: {
           main: '#0F172A',
           contrastText: '#ffffff'
+      },
+      veryLightBackground: '#ffffff',
+      lightBackground: '#ffffff',
+      darkBackground: '#F9FAFB',
+      darkText: '#000000',
+      mediumDarkText: "#a8a8a8",
+      light: {
+        main: '#ffffff',
+        contrastText: '#0F172A'
+      }
+      }});
+
+  const darkTheme = createTheme({
+    palette: {
+      light: {
+          main: '#0F172A',
+          contrastText: '#ffffff'
         },
-        light: {
+        veryLightBackground: '#242424',
+        lightBackground: '#484848',
+        darkBackground: '#363636',
+        darkText: '#f0f0f0',
+        mediumDarkText: "#a8a8a8",
+        dark: {
           main: '#ffffff',
           contrastText: '#0F172A'
         }
       }});
-
   // //detect auth state
   onAuthStateChanged(auth, user => {
       setCurrentUser(user);
-      console.log(currentUser);
+      setIsAdmin( !isNil(user) && admins.includes(user.email));
+      setIsDarkMode(false);
    });
 
 
   return (<>
-    <ThemeProvider theme={theme}>
+    <ThemeProvider theme={isDarkMode ? darkTheme : theme}>
   <UserContext.Provider value={currentUser}> 
+    <AutoSaveContext.Provider value={autoSave}>
     <div dir="rtl">
-      <TopBar>
+      <TopBar isAdmin={isAdmin}>
       </TopBar>
       <SideBar> 
       </SideBar>  
-      <div className="mainRoute" id="mainPart">
+      <div className="mainRoute" style={{backgroundColor: isDarkMode ? darkTheme.palette.veryLightBackground : theme.palette.veryLightBackground}} id="mainPart">
         <Routes>
         <Route path="*" element={<NoMatch />} />
         <Route path="/" element={<HomePage />} />
@@ -183,11 +207,13 @@ export function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/editor" element={<Editor />} />
         <Route path="/documents" element={<MyDocuments />} />
-        <Route path="/settings" element={<AdminPage />} />
+        <Route path="/admin" element={<AdminPage isAdmin={isAdmin}/>} />
+        <Route path="/settings" element={<SettingsPage setAutoSave={setAutoSave} setIsDarkMode={setIsDarkMode} isDarkMode={isDarkMode} />} />
         <Route path="/addTemplate" element={<TemplateCreator />} />
       </Routes>
       </div>
     </div>
+    </AutoSaveContext.Provider>
     </UserContext.Provider>
     </ThemeProvider>
   

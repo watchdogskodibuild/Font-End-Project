@@ -6,6 +6,7 @@ import { updateUserProfile, UserContext } from '../app/app';
 import { useContext, useEffect } from 'react';
 import { isNil } from 'lodash';
 import { useNavigate } from 'react-router-dom';
+import { CustomCard } from '../card/card';
 
 export const Profile = () => {
   const userProfile = useContext(UserContext);
@@ -27,9 +28,7 @@ export const Profile = () => {
   if(userProfile) {
   return (
         <div className="max-w-4xl mx-auto">
-          <Card>
-            <CardHeader className="text-center" title="פרופיל משתמש" subheader="צפה ועדכן את פרטי המשתמש שלך">
-            </CardHeader>
+          <CustomCard className="text-center"  title="פרופיל משתמש" subTitle="צפה ועדכן את פרטי המשתמש שלך">
             <CardContent>
               <div className="flex flex-col">
                     <FormControl>
@@ -45,9 +44,9 @@ export const Profile = () => {
               </div>
             </CardContent>
             <CardActions className="full-width justify-between padding-35-percent">
-                <Button variant="contained" color="secondary" onClick={update}>עדכן פרטים</Button>
+                <Button variant="contained" color="dark" onClick={update}>עדכן פרטים</Button>
              </CardActions>
-          </Card>
+          </CustomCard>
         </div>
     );
   }

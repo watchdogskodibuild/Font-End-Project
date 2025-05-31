@@ -22,13 +22,11 @@ useEffect( () => {
       navigate("/login");
   }
 
-  console.log(templateType);
   if(!templateTypeNumber) {
     if(isNaN(templateType)) {
       navigate("/settings");
     } else {
       let num =Number(templateType);
-      console.log(num);
       setTemplateTypeNumber(num);
     }
 
@@ -40,7 +38,7 @@ useEffect( () => {
     if(!templateTypeNumber) {
       return;
     }
-    
+
     if( !Object.values(templateTypes).includes(templateTypeNumber)) {
       navigate("/settings");
     }

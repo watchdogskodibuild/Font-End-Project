@@ -24,14 +24,16 @@
 
 .width-60-percent {
   width: 60%;
-}
-
-.width-30-percent {
-  width: 30%;
+  
 }
 
 .width-20-percent {
   width: 20%;
+}
+
+.action-button {
+  min-width: 10vw!important;
+  max-width: 200px;
 }
 
 .min-width-20-percent {
@@ -40,7 +42,11 @@
 }
 
 .margin {
-  margin:2%;
+  margin: 1% !important;
+}
+
+.margin-left {
+  margin-left: 2% !important;
 }
 
 .row {
@@ -69,6 +75,10 @@
   align-items: center;
 } 
 
+.width-30-percent {
+  width: 30%;
+}
+
 .fullHeight {
   height: 100%;
 }
@@ -96,12 +106,16 @@
 
 
 .text-sm {
-  font-size: 0.875rem;
+  font-size: 1vh;
   line-height: 25px;
 }
 
+.text-thin {
+  font-weight: 100;
+}
+
 .text-md {
-  font-size: 1rem;
+  font-size: 2vh;
   line-height: 25px;
 }
 
@@ -162,6 +176,7 @@
   padding: 0.5rem;
   border-radius: 9999px;
   background-color: #e5e7eb;
+  color: black;
 }
 
   .dark-color {

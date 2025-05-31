@@ -2,12 +2,12 @@ import { useEffect, useRef, useState, useContext } from "react";
 import { Button, Input, Tab, Tabs, Box, Card, InputLabel, FormControl, TextField, duration} from "@mui/material";
 import { Save, Download, Share2, MoreHorizontal } from "lucide-react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { getDocument, getTemplateById, updateDocument } from "../app/app";
+import { AutoSaveContext, getDocument, getTemplateById, updateDocument } from "../app/app";
 import { addDocumentsForUser } from "../app/app";
 import { UserContext } from '../app/app';
-import { isNil } from "lodash";
 
 export function Editor() {
+  const autoSave = useContext(AutoSaveContext);
   const user = useContext(UserContext);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -15,14 +15,15 @@ export function Editor() {
   const editorRef = useRef(null);
   const [content, setContent] = useState("");
   const [description, setDescription] = useState("");
+  const [documentId, setDocumentId] = useState(null);
   let templateId = searchParams.get('template');
-  let documentId = searchParams.get('documentId');
-  
+
+  let docId = searchParams.get('documentId');
 //   // Load template content when component mounts
+
   useEffect(() => {
     if (templateId) {
         getTemplateById(templateId).then(template => {
-          console.log(template);
           if (template.exists()) {
             setTitle(template.data().name);
             setContent(template.data().content);
@@ -32,20 +33,24 @@ export function Editor() {
         
     }
   }, [templateId]);
+
+
+
   
   useEffect(() => {
-    if (documentId && user) {
-        getDocument(documentId).then(document => {
+    if (docId && user) {
+        getDocument(docId).then(document => {
           if(document.exists()) {
+            setDocumentId(docId);
             setTitle(document.data().title);
             setDescription(document.data().description);
             setContent(document.data().content);
           } else {
-            documentId = null;
+            setDocumentId(null);
           }
         });
        };
-  }, [documentId, user]);
+  }, [docId, user]);
   
   useEffect(() => {
     const textarea = editorRef.current;
@@ -60,16 +65,6 @@ export function Editor() {
       navigate("/login");
     }
   }, [user]);
-
-//   function TabPanel({ value, index, children }) {
-//   return (
-//     value === index && (
-//       <Box sx={{ p: 2 }}>
-//         <Typography>{children}</Typography>
-//       </Box>
-//     )
-//   );
-// }
 
     const handleDownload = () => {
         const blob = new Blob([content], { type: 'text/plain' });
@@ -90,6 +85,27 @@ export function Editor() {
         addDocumentsForUser(content, title, description, templateId, user);
       }
     }
+
+  useEffect(() => {
+      if(autoSave)
+      {
+        const interval = setInterval(() => {
+          if(documentId) {
+            console.log(documentId);
+            updateDocument(content, title, description, documentId);
+          } else {
+            addDocumentsForUser(content, title, description, templateId, user).then(document => {
+              setDocumentId(document.id);
+            });
+          }
+        }, 30000);
+       return () => {
+        clearInterval(interval);
+        };
+      }
+
+  }, [autoSave, title, description, content, documentId])
+
 
   return (
     <div className="flex flex-col full-height full-width">

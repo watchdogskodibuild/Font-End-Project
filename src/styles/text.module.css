@@ -1,7 +1,8 @@
 h1.title {
-  font-size: 5vh;
+  font-size: 3vh;
   font-family: 'Heebo', Arial, sans-serif;
   font-weight: 600;
   color:black;
   border-radius: 0.8rem;
+  min-width: 20vw!important;
 } 

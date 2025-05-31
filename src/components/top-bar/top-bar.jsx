@@ -1,20 +1,25 @@
 import { useContext } from 'react';
 import styles from './top-bar.module.css';
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext, UserContext } from '../app/app';
 import { Button } from '@mui/material';
 import { isNil } from 'lodash';
 import { signOut } from 'firebase/auth';
 
-export function TopBar({ title }) {
+export function TopBar({ title, isAdmin }) {
   const user = useContext(UserContext);
   const location = useLocation();
   const auth = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const disconnectUser = () => {
     signOut(auth);
   }
   
+  const goToAdminPage = () => {
+    navigate("/admin")
+  }
+
   const getPageTitle = () => {
     if (title) return title;
     
@@ -29,7 +34,7 @@ export function TopBar({ title }) {
         return "פורטל המנהל";
       case "/profile":
         return "פרופיל";
-      case "/admin-settings":
+      case "/admin":
         return "הגדרות מנהל";
       case "/login":
         return "כניסה";      
@@ -43,7 +48,10 @@ export function TopBar({ title }) {
   return (
     <div className={styles.container}>
       <h1 className={styles.title}>{getPageTitle()}</h1>
-      {!isNil(user) && <Button color='light' variant="contained" size='large' onClick={disconnectUser}>התנתק</Button>}    
-    </div>
+      <div className="row justify-end full-width">
+        {!isNil(user) && isAdmin && <Button className="margin-left action-button" color='light' variant="contained" size='large' onClick={goToAdminPage}>פורטל מנהל</Button>}        
+        {!isNil(user) && <Button className="action-button" color='light' variant="contained" size='large' onClick={disconnectUser}>התנתק</Button>}
+        </div>
+      </div>
   );
 } 

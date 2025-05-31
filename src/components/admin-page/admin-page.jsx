@@ -10,9 +10,7 @@ import { AddTemplateCard } from '../add-template-card/add-template-card';
 import { TemplateUsedChart } from '../templates-used-chart/templates-used-chart';
 import { UsersWithMostDocumentsPie } from '../user-with-most-documents/user-with-most-documents';
 
-export function AdminPage() {
-  
-  const [isAdmin, setisAdmin] = useState(false);
+export function AdminPage({isAdmin}) {
   const navigate = useNavigate();
   var user = useContext(UserContext);
 
@@ -21,7 +19,9 @@ export function AdminPage() {
     if(isNil(user)) {
       navigate("/login");
       } else {
-        setisAdmin(admins.includes(user.email));
+        if(!isAdmin) {
+          navigate("/");
+        }
       }
   }, [user]);
 
@@ -35,7 +35,7 @@ export function AdminPage() {
     {isAdmin && <div className={styles.mainSection}>
     <section className={styles.addTemplateSection}>
       <p className="text-xl">הוספת תבנית חדשה</p>
-    <div className="row">
+    <div className="row justify-between">
       <AddTemplateCard title="תבנית ללימודים" icon={GraduationCap} templateType={templateTypes.study}></AddTemplateCard>
       <AddTemplateCard title="תבנית משרדית" icon={Briefcase} templateType={templateTypes.work}></AddTemplateCard>
       <AddTemplateCard title="תבנית אישית" icon={PenLine} templateType={templateTypes.personal}></AddTemplateCard>
