@@ -91,7 +91,6 @@ export function Editor() {
       {
         const interval = setInterval(() => {
           if(documentId) {
-            console.log(documentId);
             updateDocument(content, title, description, documentId);
           } else {
             addDocumentsForUser(content, title, description, templateId, user).then(document => {

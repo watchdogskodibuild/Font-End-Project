@@ -1,15 +1,13 @@
 import { Routes, Route } from "react-router-dom";
 import { TopBar } from "@/components/top-bar/top-bar";
-// content pages
 import { Home as HomePage } from "@/components/home/home";
 import { About as AboutPage } from "@/components/about/about";
 import { Profile as ContactPage } from "@/components/profile/profile";
 import {Login} from "@/components/login/login";
 import { NoMatch } from "@/components/not-found/not-found";
 import { onAuthStateChanged } from "firebase/auth";
-import { useState, createContext } from "react";
+import { useState, createContext, useEffect } from "react";
 import '@/styles/main.css';
-// navigation
 import { SideBar } from "../side-bar/side-bar";
 import { Signup } from "../signup/signup";
 import { initializeApp } from "firebase/app";
@@ -26,8 +24,8 @@ import { AdminPage } from "../admin-page/admin-page";
 import { TemplateCreator } from "../template-creator/template-creator";
 import { updateProfile } from "firebase/auth";
 import { SettingsPage } from "../settings/settings";
-document.documentElement.style.overflow = 'auto'; // For the entire document
-document.body.style.overflow = 'auto'; // For the body of the document
+document.documentElement.style.overflow = 'auto';
+document.body.style.overflow = 'auto';
 
 const firebaseApp = initializeApp({
   apiKey: "AIzaSyDrJPKOEPB9_Drkp-cUWTi_G2siBLXTwbg",
@@ -38,6 +36,7 @@ const firebaseApp = initializeApp({
   appId: "1:928232401211:web:0dfdac6952ded9e6f9ef1e",
   measurementId: "G-XHZFJMZMJ9"
 });
+
 /******* DB Access *******/
 const db = getFirestore(firebaseApp);
 const documentsTable = collection(db, "userDocuments");
@@ -139,13 +138,17 @@ export const admins = ["elayf00@gmail.com", "itayhw96@gmail.com"];
   }
 };
 
+/*** setting context ***/
 export const AutoSaveContext = createContext(false); 
+
+
 export function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [autoSave, setAutoSave] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
   
+
   const theme = createTheme({
     palette: {
       dark: {
@@ -179,23 +182,27 @@ export function App() {
           contrastText: '#0F172A'
         }
       }});
-  // //detect auth state
-  onAuthStateChanged(auth, user => {
+  
+  
+  //detect auth state
+  useEffect(() => {
+    const subscribe = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
       setIsAdmin( !isNil(user) && admins.includes(user.email));
       setIsDarkMode(false);
+      return subscribe;
    });
-
+  }, [])
 
   return (<>
-    <ThemeProvider theme={isDarkMode ? darkTheme : theme}>
+  <ThemeProvider theme={isDarkMode ? darkTheme : theme}>
   <UserContext.Provider value={currentUser}> 
     <AutoSaveContext.Provider value={autoSave}>
     <div dir="rtl">
-      <TopBar isAdmin={isAdmin}>
-      </TopBar>
       <SideBar> 
       </SideBar>  
+      <TopBar isAdmin={isAdmin}>
+      </TopBar>
       <div className="mainRoute" style={{backgroundColor: isDarkMode ? darkTheme.palette.veryLightBackground : theme.palette.veryLightBackground}} id="mainPart">
         <Routes>
         <Route path="*" element={<NoMatch />} />
@@ -216,7 +223,6 @@ export function App() {
     </AutoSaveContext.Provider>
     </UserContext.Provider>
     </ThemeProvider>
-  
   </>
 );
 }; 

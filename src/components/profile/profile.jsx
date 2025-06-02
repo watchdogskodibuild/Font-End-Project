@@ -11,12 +11,15 @@ import { CustomCard } from '../card/card';
 export const Profile = () => {
   const userProfile = useContext(UserContext);
   const navigate = useNavigate();
-  const [name, setName] = useState();
+  const [name, setName] = useState("");
+
   useEffect(() => {
     if(isNil(userProfile)) {
       navigate("/login");
       } else {
-        setName(userProfile.displayName);
+        if(!isNil(userProfile.displayName)) {
+          setName(userProfile.displayName);
+        }
       }
   }, [userProfile]);
 
@@ -35,12 +38,11 @@ export const Profile = () => {
                       <FormLabel className="text-sm font-medium">שם מלא</FormLabel>
                       <TextField value={name} onChange={(e) => setName(e.target.value)}></TextField>
                     </FormControl>
-                    <FormControl contentEditable="false">
+                    <FormControl>
                       <FormLabel className="text-sm font-medium">אימייל</FormLabel>
-                      <TextField  value={userProfile.email}
-                      inputProps={{ readOnly: true }}></TextField>
+                      <TextField  value={userProfile.email} 
+                      InputProps={{ readOnly: true }}></TextField>
                     </FormControl>
- 
               </div>
             </CardContent>
             <CardActions className="full-width justify-between padding-35-percent">

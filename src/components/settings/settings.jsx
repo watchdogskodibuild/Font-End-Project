@@ -38,7 +38,8 @@ export function SettingsPage({setAutoSave, setIsDarkMode, isDarkMode}) {
           <p className='text-md'>מצב כהה</p>
           <p className='text-sm text-thin'>תצוגה כהה לכלל האתר</p>
           </div> 
-          <Switch checked={isDarkMode} onChange={() => setIsDarkMode(!isDarkMode)}></Switch>
+          <Switch checked={isDarkMode} onChange={() => {setIsDarkMode(!isDarkMode)
+          }}></Switch>
         </div>
       </CardContent>
     </CustomCard>

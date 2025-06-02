@@ -102,7 +102,7 @@ export function Signup() {
                 <FormControl fullWidth className="width-80-percent" error={!passwordValid}>
                 <FormLabel>סיסמא</FormLabel>
                   <TextField
-                    id="password"סיסמא
+                    id="password"
                     type={showPassword ? "text" : "password"}
                     value={password}
                     error={!passwordValid}
@@ -157,7 +157,7 @@ export function Signup() {
                 variant="contained"
                 type="submit"
                 color="secondary"
-                className="full-width"
+                className="fullWidth"
                 disabled={isLoading || !emailValid || !passwordVerificationValid || !password  || !email || !passwordVerification}
               >
                 {isLoading ? (
