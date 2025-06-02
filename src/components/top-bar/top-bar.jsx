@@ -60,7 +60,7 @@ export function TopBar({ isAdmin }) {
     <div className={styles.topBar}>
       <div className={styles.logo}>
           <Link to="/">
-          <img src="../../public/icons/logo.png" alt="Easy2Write Logo"/>
+          <img src="./icons/logo.png" alt="Easy2Write Logo"/>
           </Link>
       </div>
     <div className={styles.container}>

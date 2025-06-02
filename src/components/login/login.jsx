@@ -93,25 +93,6 @@ export function Login() {
                 </div>
               </div>
               
-              <div className="flex items-center justify-between space-top">
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id="remember"
-                    className="rounded pad-left border-gray-300"
-                  />
-                  <InputLabel htmlFor="remember" className="text-sm font-medium">
-                    זכור אותי
-                  </InputLabel>
-                </div>
-                <Link
-                  to="/forgot-password"
-                  className="text-sm font-medium"
-                >
-                  שכחת סיסמה?
-                </Link>
-              </div>
-              
               <Button
                 variant="contained"
                 type="submit"
