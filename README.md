@@ -28,7 +28,7 @@
 ## ▶️ איך מריצים מקומית?
 
 ```bash
-git clone https://github.com/your-username/easy2write.git
+git clone https://github.com/watchdogskodibuild/Font-End-Project.git
 cd easy2write
 npm install
 npm run dev
